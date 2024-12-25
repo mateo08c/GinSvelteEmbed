@@ -52,7 +52,7 @@ jobs:
           chmod +x ./binary
 
       - name: Upload binary to VPS
-        uses: appleboy/scp-action@v0.1.5
+        uses: appleboy/scp-action@v1.2.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -62,11 +62,10 @@ jobs:
           target: "/gin-svelte-embed"
 
       - name: Restart service
-        uses: appleboy/ssh-action@v0.1.5
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: 22
-          script: |
-            sudo systemctl restart gin-svelte-embed
+          script: sudo systemctl restart gin-svelte-embed
