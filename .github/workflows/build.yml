@@ -13,7 +13,7 @@ jobs:
       - name: Update certificates
         run: |
           apt-get update
-          apt-get install -y --reinstall ca-certificates git curl
+          apt-get install -y ca-certificates git curl
 
       - name: Set up Node.js 20
         uses: actions/setup-node@v3
