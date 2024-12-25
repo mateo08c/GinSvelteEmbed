@@ -86,8 +86,8 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
-	"strings"
 	"package-name/web"
+	"strings"
 )
 
 func main() {
@@ -95,7 +95,7 @@ func main() {
 
 	// Create a Gin engine
 	r := gin.Default()
-	
+
 	// Define an API route
 	api := r.Group("/api")
 	api.GET("/hello", func(c *gin.Context) {
@@ -143,6 +143,7 @@ func getFileSystem() http.FileSystem {
 	}
 	return http.FS(fSys)
 }
+
 ```
 
 ## 🛠 Development
@@ -150,11 +151,21 @@ func getFileSystem() http.FileSystem {
 For local development, update `vite.config.js` to proxy API requests:
 
 ```js
-import {sveltekit} from '@sveltejs/kit/vite';
-import {defineConfig} from 'vite';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-    // ... (proxy configuration details)
+    plugins: [sveltekit()],
+    server: {
+        proxy: {
+            "/api": {
+                target: "http://127.0.0.1:8080",
+                changeOrigin: true,
+                secure: false,
+                ws: true,
+            },
+        },
+    },
 });
 ```
 
@@ -167,10 +178,6 @@ export default defineConfig({
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check [issues page](link-to-issues).
-
-## 📝 License
-
-This project is [MIT](link-to-license) licensed.
 
 ---
 
