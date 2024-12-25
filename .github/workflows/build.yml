@@ -1,0 +1,72 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Update certificates
+        run: |
+          apt-get update
+          apt-get install -y --reinstall ca-certificates git curl
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - uses: actions/checkout@v2
+
+      - name: Install Node.js dependencies
+        run: |
+          cd web
+          rm -rf node_modules
+          rm -rf package-lock.json
+          npm install 
+
+      - name: Build Svelte project
+        run: |
+          cd web
+          npm run build 
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.23'
+
+      - name: Install Go dependencies
+        run: |
+          go mod tidy
+
+      - name: Build Go project
+        run: |
+          go build -o ./binary
+
+      - name: Make binary executable
+        run: |
+          chmod +x ./binary
+
+      - name: Upload binary to VPS
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          source: "./binary"
+          target: "/gin-svelte-embed"
+
+      - name: Restart service
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          script: |
+            sudo systemctl restart gin-svelte-embed
