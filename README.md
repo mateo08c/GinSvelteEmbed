@@ -151,8 +151,8 @@ func getFileSystem() http.FileSystem {
 For local development, update `vite.config.js` to proxy API requests:
 
 ```js
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import {sveltekit} from '@sveltejs/kit/vite';
+import {defineConfig} from 'vite';
 
 export default defineConfig({
     plugins: [sveltekit()],
@@ -167,6 +167,14 @@ export default defineConfig({
         },
     },
 });
+```
+
+## ⚠️ Important Note
+
+Before running the Go server, make sure to build the SvelteKit frontend or create empty directories for the static files:
+
+```sh
+npm run build
 ```
 
 ## 📚 Learn More
