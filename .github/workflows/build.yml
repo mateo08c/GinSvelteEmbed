@@ -57,7 +57,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          port: 22
+          port: 2234
           source: "./binary"
           target: "/gin-svelte-embed"
 
@@ -67,5 +67,5 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          port: 22
+          port: 2234
           script: sudo systemctl restart gin-svelte-embed
