@@ -11,12 +11,30 @@
         try {
             loading = true;
             const response = await fetch('/api/count');
-            if (!response.ok) throw new Error('Failed to fetch count');
-            const data = await response.json();
+
+            // On essaie de parser la réponse en JSON
+            let data;
+            try {
+                data = await response.json();
+            } catch (jsonError) {
+                throw new Error('Erreur lors du parsing de la réponse JSON');
+            }
+
+            // Si le status HTTP n'est pas ok, on vérifie si le JSON contient une erreur
+            if (!response.ok) {
+                throw new Error(data.error || 'Erreur lors de la récupération du compteur');
+            }
+
+            // Même si le status est ok, on vérifie si le JSON contient une erreur
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            // Si tout est ok, on met à jour le compteur
             count = data.count;
             error = null;
         } catch (e) {
-            error = e instanceof Error ? e.message : 'An error occurred';
+            error = e instanceof Error ? e.message : 'Une erreur est survenue';
         } finally {
             loading = false;
         }
@@ -25,17 +43,33 @@
     async function updateCount(action: 'increment' | 'decrement') {
         try {
             loading = true;
-            const response = await fetch(`/api/${action}`, {method: 'POST'});
-            if (!response.ok) throw new Error(`Failed to ${action}`);
-            const data = await response.json();
+            const response = await fetch(`/api/${action}`, { method: 'POST' });
+
+            let data;
+            try {
+                data = await response.json();
+            } catch (jsonError) {
+                throw new Error('Erreur lors du parsing de la réponse JSON');
+            }
+
+            if (!response.ok) {
+                throw new Error(data.error || `Erreur lors de la tentative de ${action}`);
+            }
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
             count = data.count;
             error = null;
         } catch (e) {
-            error = e instanceof Error ? e.message : 'An error occurred';
+            error = e instanceof Error ? e.message : 'Une erreur est survenue';
         } finally {
             loading = false;
         }
     }
+
+
 
     onMount(fetchCount);
 </script>
