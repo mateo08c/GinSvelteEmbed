@@ -1,3 +1,5 @@
 counter.txt
 .idea/
 *.env
+build.ps1
+bin/

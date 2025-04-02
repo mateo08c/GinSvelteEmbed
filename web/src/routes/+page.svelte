@@ -1,61 +1,40 @@
 <script lang="ts">
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcomeFallback from '$lib/images/svelte-welcome.png';
-
-	let { data } = $props();
+	import Header from '$lib/components/Header.svelte';
+	import CounterSection from '$lib/components/CounterSection.svelte';
+	import ReadmeSection from '$lib/components/ReadmeSection.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
-
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcomeFallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter count={data.count}/>
-</section>
+<div class="container">
+	<Header />
+	<CounterSection />
+	<ReadmeSection />
+	<Footer />
+</div>
 
 <style>
-	section {
+	:global(:root) {
+		--vp-c-brand: #646cff;
+		--vp-c-brand-dark: #535bf2;
+		--vp-c-text-1: #213547;
+		--vp-c-text-2: #666;
+		--vp-c-danger: #dc2626;
+		--vp-c-danger-soft: #fee2e2;
+	}
+
+	:global(body) {
+		margin: 0;
+		background-color: #f9fafb;
+		color: var(--vp-c-text-1);
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem;
+		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
 	}
 </style>
