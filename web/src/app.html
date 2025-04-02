@@ -1,12 +1,36 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
-	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- SEO Meta Tags -->
+	<meta name="robots" content="index, follow" />
+	<meta name="robots" content="noarchive" />
+	<link rel="canonical" href="https://gin-svelte-embed.mateo08.fr/" />
+
+	<!-- OpenGraph Meta Tags -->
+	<meta property="og:title" content="SvelteKit + Go Boilerplate" />
+	<meta property="og:description" content="Supercharge your web development with SvelteKit and Go!" />
+	<meta property="og:image" content="https://gin-svelte-embed.mateo08.fr/sc.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:url" content="https://gin-svelte-embed.mateo08.fr/" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Gin-Svelte Embed" />
+
+	<!-- Twitter Card Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="SvelteKit + Go Boilerplate" />
+	<meta name="twitter:description" content="Supercharge your web development with SvelteKit and Go!" />
+	<meta name="twitter:image" content="https://gin-svelte-embed.mateo08.fr/sc.png" />
+
+	<!-- SvelteKit Head -->
+	%sveltekit.head%
+
+</head>
+<body data-sveltekit-preload-data="hover">
+<div style="display: contents">%sveltekit.body%</div>
+</body>
 </html>
