@@ -4,11 +4,13 @@ import (
 	"GinSvelteEmbed/internal/counter"
 	"GinSvelteEmbed/internal/debug"
 	"GinSvelteEmbed/web"
+	ratelimit "github.com/JGLTechnologies/gin-rate-limit"
 	"github.com/gin-gonic/gin"
 	"io/fs"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -38,10 +40,32 @@ func main() {
 	}
 }
 
+func keyFunc(c *gin.Context) string {
+	return c.ClientIP()
+}
+
+func errorHandler(c *gin.Context, info ratelimit.Info) {
+	c.JSON(http.StatusTooManyRequests, gin.H{"error": "Rate limit exceeded, reset in " + time.Until(info.ResetTime).String()})
+}
+
 // setupAPIRoutes configures the API endpoints
 func setupAPIRoutes(r *gin.Engine, cnt *counter.Counter) {
+	// Middleware to limit the rate of requests
+
+	//je veux max 10request par minute et reset après 30 secondes
+	store := ratelimit.InMemoryStore(&ratelimit.InMemoryOptions{
+		Rate:  1 * time.Minute, // 1 minute
+		Limit: 10,              // max 10 requests per minute
+	})
+
+	mw := ratelimit.RateLimiter(store, &ratelimit.Options{
+		ErrorHandler: errorHandler,
+		KeyFunc:      keyFunc,
+	})
+
 	api := r.Group("/api")
 	{
+		api.Use(mw)
 		api.GET("/count", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"count": cnt.Value()})
 		})
